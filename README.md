@@ -1,6 +1,6 @@
 # react-native-matomo-gf
 
-Wrapper around native sdk-s for matomo
+React Native wrapper for Matomo iOS and Android SDK
 
 ## Installation
 
@@ -11,7 +11,7 @@ npm install react-native-matomo-gf
 ## Usage
 
 ```js
-import { multiply } from "react-native-matomo-gf";
+import { multiply } from 'react-native-matomo-gf';
 
 // ...
 

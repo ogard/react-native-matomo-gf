@@ -48,6 +48,7 @@ repositories {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
     }
+    maven { url 'https://www.jitpack.io' }
     google()
     mavenCentral()
     jcenter()
@@ -56,4 +57,6 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
+
 }
