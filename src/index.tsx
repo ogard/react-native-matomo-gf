@@ -17,9 +17,16 @@ const MatomoGf = NativeModules.MatomoGf
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
+/**
+ * Example function
+ *
+ * @param a First value
+ * @param b Second value
+ * @returns Promise of the result
+ */
+export const multiply = (a: number, b: number): Promise<number> => {
   return MatomoGf.multiply(a, b);
-}
+};
 
 /**
  * Initialize the tracker - first method that needs to be invoked.
@@ -130,4 +137,13 @@ export const trackEvent = ({
   url: null | string;
 }): void => {
   MatomoGf.trackEvent(category, action, { name, value, url });
+};
+
+export default {
+  initTracker,
+  setAppOptOut,
+  setUserId,
+  setCustomDimension,
+  trackScreen,
+  trackEvent,
 };
