@@ -1,6 +1,6 @@
 {
   "name": "react-native-matomo-gf",
-  "version": "0.1.3",
+  "version": "0.1.2",
   "description": "React Native wrapper for Matomo iOS and Android SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

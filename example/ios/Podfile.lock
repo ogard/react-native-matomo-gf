@@ -378,7 +378,7 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
-  - react-native-matomo-gf (0.1.3):
+  - react-native-matomo-gf (0.1.2):
     - MatomoTracker (~> 7.5.2)
     - React-Core
   - React-NativeModulesApple (0.72.4):
@@ -698,7 +698,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c7f826e40fa9cab5d37cab6130b1af237332b594
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
-  react-native-matomo-gf: 9c1c77d00e274ad25a8df7e2d5be339318be4d93
+  react-native-matomo-gf: 97a64f8262ec6940c6cf59282320b5c99d9a6d00
   React-NativeModulesApple: edb5ace14f73f4969df6e7b1f3e41bef0012740f
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
