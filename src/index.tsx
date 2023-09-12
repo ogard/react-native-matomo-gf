@@ -31,8 +31,9 @@ export const multiply = (a: number, b: number): Promise<number> => {
 /**
  * Initialize the tracker - first method that needs to be invoked.
  *
- * @param url    Tracking HTTP API endpoint, for example, https://matomo.yourdomain.tld/matomo.php
- * @param siteId id of your site in the backend
+ * @param params        The argument of the function
+ * @param params.url    Tracking HTTP API endpoint, for example, https://matomo.yourdomain.tld/matomo.php
+ * @param params.siteId id of your site in the backend
  */
 export const initTracker = ({
   url,
@@ -75,8 +76,9 @@ export const setUserId = (userId: null | string): void => {
  * Custom dimension per screen.
  * Requires <a href="https://plugins.matomo.org/CustomDimensions">Custom Dimensions</a> plugin (server-side)
  *
- * @param id             accepts values greater than 0
- * @param value is limited to 255 characters, you can pass null to delete a value
+ * @param params         The argument of the function
+ * @param params.id      accepts values greater than 0
+ * @param params.value   is limited to 255 characters, you can pass null to delete a value
  */
 export const setCustomDimension = ({
   id,
@@ -91,9 +93,10 @@ export const setCustomDimension = ({
 /**
  * To track a screenview.
  *
- * @param path  Example: "/user/settings/billing"
- * @param title Example: Help / Feedback will create the Action Feedback in the category Help.
- *              The title of the action being tracked. It is possible to use slashes / to set one or several categories for this action.
+ * @param params The argument of the function
+ * @param params.path  Example: "/user/settings/billing"
+ * @param params.title Example: Help / Feedback will create the Action Feedback in the category Help.
+ *                     The title of the action being tracked. It is possible to use slashes / to set one or several categories for this action.
  */
 export const trackScreen = ({
   path,
@@ -109,19 +112,20 @@ export const trackScreen = ({
  * Events are a useful way to collect data about a user's interaction with interactive components of your app,
  * like button presses or the use of a particular item in a game.
  *
- * @param category (required) this String defines the event category.
- *                 You might define event categories based on the class of user actions,
- *                 like clicks or gestures or voice commands, or you might define them based upon the
- *                 features available in your application (play, pause, fast forward, etc.).
- * @param action   (required) this String defines the specific event action within the category specified.
- *                 In the example, we are basically saying that the category of the event is user clicks,
- *                 and the action is a button click.
- * @param name     (optional) Defines a label associated with the event.
- *                 For example, if you have multiple Button controls on a screen, you might use the label to specify the specific View control identifier that was clicked.
- * @param value    (optional) Defines a numeric value associated with the event.
- *                 For example, if you were tracking "Buy" button clicks, you might log the number of items being purchased, or their total cost.
- * @param path     (optional) The path under which this event occurred.
- *                 Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
+ * @param params          The argument of the function
+ * @param params.category (required) this String defines the event category.
+ *                        You might define event categories based on the class of user actions,
+ *                        like clicks or gestures or voice commands, or you might define them based upon the
+ *                        features available in your application (play, pause, fast forward, etc.).
+ * @param params.action   (required) this String defines the specific event action within the category specified.
+ *                        In the example, we are basically saying that the category of the event is user clicks,
+ *                        and the action is a button click.
+ * @param params.name     (optional) Defines a label associated with the event.
+ *                        For example, if you have multiple Button controls on a screen, you might use the label to specify the specific View control identifier that was clicked.
+ * @param params.value    (optional) Defines a numeric value associated with the event.
+ *                        For example, if you were tracking "Buy" button clicks, you might log the number of items being purchased, or their total cost.
+ * @param params.path     (optional) The path under which this event occurred.
+ *                        Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
  */
 export const trackEvent = ({
   category,
@@ -139,6 +143,50 @@ export const trackEvent = ({
   MatomoGf.trackEvent(category, action, { name, value, url });
 };
 
+/**
+ * Tracks an site search
+ *
+ * @param params               The argument of function
+ * @param params.query         (required) Searched query in the app
+ * @param params.category      (optional) You can optionally specify a search category with this parameter.
+ * @param params.resultCount   (optional) We recommend to set the search count to the number of search results displayed on the results page. When keywords are tracked with a count of 0, they will appear in the "No Result Search Keyword" report
+ */
+export const trackSearch = ({
+  query,
+  category,
+  resultCount,
+}: {
+  query: string;
+  category: null | string;
+  resultCount: null | number;
+}): void => {
+  MatomoGf.trackSearch(query, { category, resultCount });
+};
+
+/**
+ * Track download url
+ *
+ * @param url  (required) The url of the download file
+ */
+export const trackDownloadLink = (url: string) => {
+  MatomoGf.trackDownloadLink(url);
+};
+
+/**
+ * Track outlink
+ *
+ * @param url  (required) The url of the outlink
+ */
+export const trackOutlink = (url: string) => {
+  MatomoGf.trackOutlink(url);
+};
+
+/**
+ * Sends a download event for this app.
+ * This only triggers an event once per app version unless you force it.
+ */
+export const trackAppDownload: () => void = MatomoGf.trackAppDownload;
+
 export default {
   initTracker,
   setAppOptOut,
@@ -146,4 +194,8 @@ export default {
   setCustomDimension,
   trackScreen,
   trackEvent,
+  trackSearch,
+  trackOutlink,
+  trackDownloadLink,
+  trackAppDownload,
 };

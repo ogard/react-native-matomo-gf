@@ -27,4 +27,10 @@ RCT_EXTERN_METHOD(trackEvent:(NSString* _Nonnull)category
                   values:(NSDictionary* _Nonnull)values
                   )
 
+RCT_EXTERN_METHOD(trackSearch:(NSString* _Nonnull)query values:(NSDictionary* _Nonnull)values)
+
+RCT_EXTERN_METHOD(trackOutlink:(NSString* _Nonnull)url)
+
+RCT_EXTERN_METHOD(trackDownloadLink:(NSString* _Nonnull)url)
+
 @end

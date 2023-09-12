@@ -1,5 +1,7 @@
 package com.reactnativematomogf;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -12,15 +14,19 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.ReadableMap;
 
 import org.matomo.sdk.Matomo;
+import org.matomo.sdk.QueryParams;
 import org.matomo.sdk.Tracker;
 import org.matomo.sdk.TrackerBuilder;
 import org.matomo.sdk.extra.TrackHelper;
+import org.matomo.sdk.TrackMe;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 @ReactModule(name = MatomoGfModule.NAME)
 public class MatomoGfModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
+    private static final String TAG = Matomo.tag(MatomoGfModule.class);
     public static final String NAME = "MatomoGf";
     private @Nullable Tracker mMatomoTracker;
     private static final Map<Integer, String> customDimensions = new HashMap<>();
@@ -137,6 +143,89 @@ public class MatomoGfModule extends ReactContextBaseJavaModule implements Lifecy
       }
 
       trackHelper.event(category, action).name(name).value(value).path(url).with(mMatomoTracker);
+    }
+
+    @ReactMethod
+    public void trackSearch(@NonNull String query, @NonNull ReadableMap values) {
+      if (mMatomoTracker == null) {
+        return;
+      }
+
+      String category = null;
+      int resultCount = 0;
+      if (values.hasKey("category") && !values.isNull("category")) {
+        category = values.getString("category");
+      }
+      if (values.hasKey("resultCount") && !values.isNull("resultCount")) {
+        resultCount = values.getInt("resultCount");
+      }
+
+      TrackHelper trackHelper = getTrackHelper();
+
+      if (trackHelper == null) {
+        return;
+      }
+
+      trackHelper.search(query).category(category).count(resultCount).with(mMatomoTracker);
+    }
+
+  @ReactMethod
+  public void trackOutlink(@NonNull String url) {
+    if (mMatomoTracker == null) {
+      return;
+    }
+
+    TrackHelper trackHelper = getTrackHelper();
+
+    if (trackHelper == null) {
+      return;
+    }
+
+    try {
+      URL urlObject = new URL(url);
+
+      trackHelper.outlink(urlObject).with(mMatomoTracker);
+    } catch (Exception e) {
+      Log.e(TAG, "Unable to parse url in trackOutlink");
+    }
+  }
+
+  @ReactMethod
+  public void trackDownloadLink(@NonNull String url) {
+    if (mMatomoTracker == null) {
+      return;
+    }
+
+
+    TrackHelper trackHelper = TrackHelper.track(new TrackMe().set(QueryParams.DOWNLOAD, url));
+    for(Map.Entry<Integer, String> entry : customDimensions.entrySet()){
+      // preserve existing custom dimensions
+      trackHelper = trackHelper.dimension(entry.getKey(), entry.getValue());
+    }
+
+    try {
+      URL urlObject = new URL(url);
+
+      // use outlink tracking to track download link (query parameter for it has been set above)
+      trackHelper.outlink(urlObject).with(mMatomoTracker);
+    } catch (Exception e) {
+      Log.e(TAG, "Unable to parse url in trackDownloadLink");
+    }
+  }
+
+    @ReactMethod
+    public void trackAppDownload() {
+      if (mMatomoTracker == null) {
+        return;
+      }
+
+      TrackHelper trackHelper = getTrackHelper();
+
+      if (trackHelper == null) {
+        return;
+      }
+
+      trackHelper.download().with(mMatomoTracker);
     }
 
     @Override

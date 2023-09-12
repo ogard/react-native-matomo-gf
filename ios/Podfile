@@ -6,6 +6,6 @@ target 'MatomoGf' do
   use_frameworks!
 
   # Pods for MatomoGf
-#  pod 'MatomoTracker', '~> 7.5'
+  pod 'MatomoTracker', '~> 7.5.2'
 
 end

@@ -1,6 +1,6 @@
 {
   "name": "react-native-matomo-gf",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React Native wrapper for Matomo iOS and Android SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -34,7 +34,10 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "react-native-matomo",
+    "matomo",
+    "piwik"
   ],
   "repository": "https://github.com/ogard/react-native-matomo-gf",
   "author": "Gastfreund GmbH <drago.odalovic@gastfreund.net> (https://github.com/ogard)",
