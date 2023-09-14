@@ -124,7 +124,7 @@ export const trackScreen = ({
  *                        For example, if you have multiple Button controls on a screen, you might use the label to specify the specific View control identifier that was clicked.
  * @param params.value    (optional) Defines a numeric value associated with the event.
  *                        For example, if you were tracking "Buy" button clicks, you might log the number of items being purchased, or their total cost.
- * @param params.path     (optional) The path under which this event occurred.
+ * @param params.url      (optional) The path under which this event occurred.
  *                        Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
  */
 export const trackEvent = ({
@@ -150,17 +150,21 @@ export const trackEvent = ({
  * @param params.query         (required) Searched query in the app
  * @param params.category      (optional) You can optionally specify a search category with this parameter.
  * @param params.resultCount   (optional) We recommend to set the search count to the number of search results displayed on the results page. When keywords are tracked with a count of 0, they will appear in the "No Result Search Keyword" report
+ * @param params.url           (optional) The path under which this event occurred.
+ *                             Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
  */
 export const trackSearch = ({
   query,
   category,
   resultCount,
+  url,
 }: {
   query: string;
   category: null | string;
   resultCount: null | number;
+  url: null | string;
 }): void => {
-  MatomoGf.trackSearch(query, { category, resultCount });
+  MatomoGf.trackSearch(query, { category, resultCount, url });
 };
 
 /**

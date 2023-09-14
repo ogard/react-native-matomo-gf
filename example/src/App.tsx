@@ -12,7 +12,7 @@ import {
 } from 'react-native-matomo-gf';
 
 const siteId = 1;
-const url = 'https://your-matomo-domain.tld/matomo.php';
+const url = 'https://gastfreund.matomo.cloud/matomo.php';
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
@@ -22,16 +22,24 @@ export default function App() {
     initTracker({ url, siteId });
     setCustomDimension({ id: 6, value: 'APP' });
     setCustomDimension({ id: 7, value: 'en' });
-    trackScreen({ path: '/entry', title: 'Entry' });
-    trackScreen({ path: '/search', title: 'Hotel Search' });
+    trackScreen({ path: 'entry', title: 'Entry' });
+    trackScreen({ path: 'search', title: 'Hotel Search' });
     trackSearch({
-      query: 'Hello site search from example app',
+      query: 'Search keyword 1',
       category: 'Hotel Search',
       resultCount: null,
+      url: 'search', // important to pass on iOS in order to preserve last screen path
     });
+    trackSearch({
+      query: 'Search keyword 2',
+      category: 'Hotel Search',
+      resultCount: null,
+      url: 'search',
+    });
+    trackScreen({ path: 'hotel-jungbrunn', title: 'Hotel Jungbrunn' });
     trackDownloadLink('https://b2c.api.dev.gastfreund.net/somefile.zip');
     trackOutlink('https://helloworld.com/news/70');
-    trackScreen({ path: '/entry', title: 'Entry' });
+    trackScreen({ path: 'hotel-jungbrunn/23456', title: 'Hello world' });
   }, []);
 
   return (
