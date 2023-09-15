@@ -1,5 +1,8 @@
 import { NativeModules, Platform } from 'react-native';
 
+const guardEmptyString = (strValue: string | null | undefined): null | string =>
+  strValue != null && strValue.length > 0 ? strValue : null;
+
 const LINKING_ERROR =
   `The package 'react-native-matomo-gf' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -124,8 +127,8 @@ export const trackScreen = ({
  *                        For example, if you have multiple Button controls on a screen, you might use the label to specify the specific View control identifier that was clicked.
  * @param params.value    (optional) Defines a numeric value associated with the event.
  *                        For example, if you were tracking "Buy" button clicks, you might log the number of items being purchased, or their total cost.
- * @param params.url      (optional) The path under which this event occurred.
- *                        Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
+ * @param params.url      (optional) The path under which this event occurred. Example: "/user/settings/billing".
+ *                        If you pass NULL, on Android the last path set by #trackScreenView will be used, on iOS the bundle id will be used
  */
 export const trackEvent = ({
   category,
@@ -140,7 +143,19 @@ export const trackEvent = ({
   value: null | number;
   url: null | string;
 }): void => {
-  MatomoGf.trackEvent(category, action, { name, value, url });
+  const eventCategory = guardEmptyString(category);
+  const eventAction = guardEmptyString(action);
+
+  if (eventCategory !== null && eventAction !== null) {
+    const eventName = guardEmptyString(name);
+    const eventUrl = guardEmptyString(url);
+
+    MatomoGf.trackEvent(category, action, {
+      name: eventName,
+      value,
+      url: eventUrl,
+    });
+  }
 };
 
 /**
@@ -150,8 +165,8 @@ export const trackEvent = ({
  * @param params.query         (required) Searched query in the app
  * @param params.category      (optional) You can optionally specify a search category with this parameter.
  * @param params.resultCount   (optional) We recommend to set the search count to the number of search results displayed on the results page. When keywords are tracked with a count of 0, they will appear in the "No Result Search Keyword" report
- * @param params.url           (optional) The path under which this event occurred.
- *                             Example: "/user/settings/billing", if you pass NULL, the last path set by #trackScreenView will be used.
+ * @param params.url           (optional) The path under which this event occurred. Example: "/user/settings/billing"
+ *                             If you pass NULL, on Android the last path set by #trackScreenView will be used, on iOS the bundle id will be used
  */
 export const trackSearch = ({
   query,
@@ -164,7 +179,18 @@ export const trackSearch = ({
   resultCount: null | number;
   url: null | string;
 }): void => {
-  MatomoGf.trackSearch(query, { category, resultCount, url });
+  const eventQuery = guardEmptyString(query);
+
+  if (eventQuery) {
+    const eventCategory = guardEmptyString(category);
+    const eventUrl = guardEmptyString(url);
+
+    MatomoGf.trackSearch(query, {
+      category: eventCategory,
+      resultCount,
+      url: eventUrl,
+    });
+  }
 };
 
 /**
@@ -173,7 +199,11 @@ export const trackSearch = ({
  * @param url  (required) The url of the download file
  */
 export const trackDownloadLink = (url: string) => {
-  MatomoGf.trackDownloadLink(url);
+  const eventUrl = guardEmptyString(url);
+
+  if (eventUrl) {
+    MatomoGf.trackDownloadLink(url);
+  }
 };
 
 /**
@@ -182,7 +212,11 @@ export const trackDownloadLink = (url: string) => {
  * @param url  (required) The url of the outlink
  */
 export const trackOutlink = (url: string) => {
-  MatomoGf.trackOutlink(url);
+  const eventUrl = guardEmptyString(url);
+
+  if (eventUrl) {
+    MatomoGf.trackOutlink(eventUrl);
+  }
 };
 
 /**

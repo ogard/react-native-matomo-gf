@@ -12,7 +12,7 @@ import {
 } from 'react-native-matomo-gf';
 
 const siteId = 1;
-const url = 'https://gastfreund.matomo.cloud/matomo.php';
+const url = 'https://your-matomo-domain.tld/matomo.php';
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
@@ -25,6 +25,12 @@ export default function App() {
     trackScreen({ path: 'entry', title: 'Entry' });
     trackScreen({ path: 'search', title: 'Hotel Search' });
     trackSearch({
+      query: '', // event shouldn't be tracked, because mandatory field is an empty string
+      category: 'Hotel Search',
+      resultCount: null,
+      url: 'search', // important to pass on iOS in order to preserve last screen path
+    });
+    trackSearch({
       query: 'Search keyword 1',
       category: 'Hotel Search',
       resultCount: null,
@@ -34,7 +40,7 @@ export default function App() {
       query: 'Search keyword 2',
       category: 'Hotel Search',
       resultCount: null,
-      url: 'search',
+      url: 'search', // important to pass on iOS in order to preserve last screen path
     });
     trackScreen({ path: 'hotel-jungbrunn', title: 'Hotel Jungbrunn' });
     trackDownloadLink('https://b2c.api.dev.gastfreund.net/somefile.zip');
